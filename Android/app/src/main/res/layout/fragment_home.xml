@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/text_home"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:textAlignment="center"
+        android:textSize="20sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <Button
+            android:id="@+id/check_safety"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Check Safety"
+            android:onClick="check"
+            android:layout_centerVertical="true"
+            android:layout_toLeftOf="@+id/report_fire"/>
+        <Button
+            android:id="@+id/report_fire"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Report Fire"
+            android:layout_centerInParent="true"/>
+        <Button
+            android:id="@+id/nasa_data"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="NASA Data"
+            android:layout_centerVertical="true"
+            android:layout_toRightOf="@+id/report_fire"/>
+
+        <SearchView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/report_fire"/>
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/report_fire"/>
+    </RelativeLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

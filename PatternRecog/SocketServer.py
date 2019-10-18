@@ -11,7 +11,7 @@ import socket
 #experiments
 
 listensocket = socket.socket()
-Port = 8000
+Port = 9000
 Port2 = 8080
 maxConnections = 999
 
@@ -48,7 +48,7 @@ print("Server started initially for interacting with client at "+ IP + " on port
 print("New connection made2 for sending")
 clientsocket2.send(message.encode())
 print("Message from device was sent to client")
-
+"""
 message = ""
 while running:
     message = clientsocket2.recv(1024).decode()
@@ -66,7 +66,7 @@ listensocket.close()
 listensocket2.close()
 
 print("Done")
-
+"""
 """
 #sample = "24.22323 62.2322"
 currentCoord = message.split(" ")
@@ -76,3 +76,5 @@ print(currentCoord, " DONE")
 ans = "arpit"
 clientsocket.send(ans.encode())
 """
+listensocket.close()
+listensocket2.close()

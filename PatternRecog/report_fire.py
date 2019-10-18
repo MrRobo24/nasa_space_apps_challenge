@@ -10,6 +10,7 @@ import numpy as np
 import math
 import requests
 import socket
+#import time
 
 os.chdir("C:/Users/mr_ro/Documents/GitHub/nasa_space_apps_challenge/PatternRecog")
 #url='https://firms.modaps.eosdis.nasa.gov/data/active_fire/viirs/csv/VNP14IMGTDL_NRT_South_Asia_24h.csv'
@@ -42,7 +43,7 @@ print("DATA DOWNLOADED")
 
 s = socket.socket()
 #hostname = "DESKTOP-L6VTJ5H"
-hostname = "192.168.0.121"
+hostname = "192.168.0.110"
 port = 8080
 
 #experimenting
@@ -55,15 +56,38 @@ s.connect((hostname,port))
 
 while True:
     print("Entered")
-    message  = s.recv()
+    message  = s.recv(1024)
     if not message == "":
         message = message.decode()
         print("Coordinates received from device")
         break
-    
+
 #receiving data
+"""
+#experiment
+try:
+    message = s.recv(8192)
+    if not message == "":
+        print(message)
+        #change the beginning time for measurement
+        begin=time.time()
+    else:
+        #sleep for sometime to indicate a gap
+        time.sleep(0.1)
+except:
+    pass
+
+
+
+
+#experiment end
+
+"""
+
+
+
 #sample = "24.22323 62.2322"
-        
+#message = "0 0"
 currentCoord = message.split(" ")
 currentCoord = list(map(float, currentCoord))
 
@@ -97,10 +121,21 @@ else:
     print("NO AREA")
     message = "0 0 0"
 
-
+message = message + "\n"
 #sending
-s.send(message.encode())
-print("DONE")
+s2 = socket.socket()
+
+#hostname = "DESKTOP-L6VTJ5H"
+hostname2 = "192.168.0.121"
+port2 = 8000
+
+
+s2.connect((hostname2,port2))
+s2.send(message.encode())
+
+
+#s.send(message.encode())
+print("sent to receiving server of aryan")
 
 
 
