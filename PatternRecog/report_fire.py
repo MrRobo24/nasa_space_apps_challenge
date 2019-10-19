@@ -13,10 +13,10 @@ import socket
 #import time
 
 os.chdir("C:/Users/mr_ro/Documents/GitHub/nasa_space_apps_challenge/PatternRecog")
-#url='https://firms.modaps.eosdis.nasa.gov/data/active_fire/viirs/csv/VNP14IMGTDL_NRT_South_Asia_24h.csv'
-#response = requests.get(url)
-#with open(os.path.join("downloaded_data.csv"), 'wb') as f:
-#    f.write(response.content)
+url='https://firms.modaps.eosdis.nasa.gov/data/active_fire/viirs/csv/VNP14IMGTDL_NRT_South_Asia_24h.csv'
+response = requests.get(url)
+with open(os.path.join("downloaded_data.csv"), 'wb') as f:
+    f.write(response.content)
     
 df = pd.read_csv("downloaded_data.csv")    
 
@@ -43,8 +43,8 @@ print("DATA DOWNLOADED")
 
 s = socket.socket()
 #hostname = "DESKTOP-L6VTJ5H"
-hostname = "192.168.0.110"
-port = 8080
+hostname = "192.168.137.130"
+port = 8090
 
 #experimenting
 #os.chdir("C:/Users/mr_ro/Documents/GitHub/nasa_space_apps_challenge/PatternRecog/output_cluster_200")
@@ -55,7 +55,7 @@ port = 8080
 s.connect((hostname,port))
 
 while True:
-    print("Entered")
+    print("Receiving Started")
     message  = s.recv(1024)
     if not message == "":
         message = message.decode()
@@ -126,8 +126,9 @@ message = message + "\n"
 s2 = socket.socket()
 
 #hostname = "DESKTOP-L6VTJ5H"
-hostname2 = "192.168.0.121"
-port2 = 8000
+hostname2 = "192.168.137.130" #aryan
+#hostname2  = "192.168.137.164 "   #arpit 
+port2 = 8050
 
 
 s2.connect((hostname2,port2))

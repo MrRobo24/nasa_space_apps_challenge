@@ -11,14 +11,18 @@ import socket
 #experiments
 
 listensocket = socket.socket()
-Port = 9000
-Port2 = 8080
+Port = 9000 #receiving port
+Port1 = 8090 #sending port to report fire
+Port2 = 7000 #sending port to calssification test
 maxConnections = 999
+
+listensocket1 = socket.socket()
+listensocket1.bind(("",Port1))
+listensocket1.listen(maxConnections)
 
 listensocket2 = socket.socket()
 listensocket2.bind(("",Port2))
 listensocket2.listen(maxConnections)
-
 
 IP = socket.gethostname()
 
@@ -43,11 +47,28 @@ while running:
 
 print("Server started initially for interacting with client at "+ IP + " on port" + str(Port))
 
+#message = "1.232 22.2323 2"
+flag = int(message.split()[2])
 
-(clientsocket2, address2) = listensocket2.accept()
-print("New connection made2 for sending")
-clientsocket2.send(message.encode())
-print("Message from device was sent to client")
+if flag == 1:
+    (clientsocket1, address1) = listensocket1.accept()
+    print("New connection made2 for sending")
+    clientsocket1.send(message.encode())
+    print("Message from device was sent to client")
+elif flag == 2:
+     (clientsocket2, address2) = listensocket2.accept()
+     print("New connection made2 for sending")
+     clientsocket2.send(message.encode())
+     print("Message from device was sent to client")
+
+
+
+
+
+
+
+
+
 """
 message = ""
 while running:
@@ -77,4 +98,4 @@ ans = "arpit"
 clientsocket.send(ans.encode())
 """
 listensocket.close()
-listensocket2.close()
+listensocket1.close()
