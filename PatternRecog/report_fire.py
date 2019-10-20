@@ -115,11 +115,21 @@ if(len(coordDF)>0):
     
     #coordDF.loc[[iMin]].to_csv("fire_at_min_dis.csv",index = False) #for printing only the coordinates and distance
     df.loc[[coordDF.loc[iMin,0]]].to_csv("fire_at_min_dis.csv",index = False) #to print all the details of that fire
-    message = str((df.iloc[coordDF.loc[iMin,0],0:2].values)[0]) +" "+ str((df.iloc[coordDF.loc[iMin,0],0:2].values)[1]) + " "+str(minDis)
+    
+    confidence = df.iloc[coordDF.loc[iMin,0],8]
+    if confidence == "high":
+        confidence = 1
+    elif confidence == "nominal":
+        confidence = 0.5
+    else:
+        confidence = 0.25
+    
+    
+    message = str((df.iloc[coordDF.loc[iMin,0],0:2].values)[0]) +" "+ str((df.iloc[coordDF.loc[iMin,0],0:2].values)[1]) + str(df.iloc[coordDF.loc[iMin,0]:]) +" "+str(minDis+str(confidence))
 
 else:
     print("NO AREA")
-    message = "0 0 0"
+    message = "24.22323 62.2322 0.2344 0.5"
 
 message = message + "\n"
 #sending

@@ -14,6 +14,7 @@ listensocket = socket.socket()
 Port = 9000 #receiving port
 Port1 = 8090 #sending port to report fire
 Port2 = 7000 #sending port to calssification test
+Port3 = 9999
 maxConnections = 999
 
 listensocket1 = socket.socket()
@@ -23,6 +24,11 @@ listensocket1.listen(maxConnections)
 listensocket2 = socket.socket()
 listensocket2.bind(("",Port2))
 listensocket2.listen(maxConnections)
+
+listensocket3 = socket.socket()
+listensocket3.bind(("",Port3))
+listensocket3.listen(maxConnections)
+
 
 IP = socket.gethostname()
 
@@ -59,6 +65,11 @@ elif flag == 2:
      (clientsocket2, address2) = listensocket2.accept()
      print("New connection made2 for sending")
      clientsocket2.send(message.encode())
+     print("Message from device was sent to client")
+elif flag == 3:
+     (clientsocket3, address3) = listensocket3.accept()
+     print("New connection made2 for sending")
+     clientsocket3.send(message.encode())
      print("Message from device was sent to client")
 
 
