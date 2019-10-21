@@ -24,7 +24,7 @@ import math
 
 s = socket.socket()
 #hostname = "DESKTOP-L6VTJ5H"
-hostname = "192.168.137.130"
+hostname = "192.168.43.22"
 port = 7000
 
 
@@ -39,7 +39,7 @@ while True:
         print("Coordinates received from device")
         break
 
-message = "30.84795 79.37023 2"
+#message = "30.84795 79.37023 2"
 #message = "31.74 75.268 2"
 currentCoord = message.split(" ")
 currentCoord = np.delete((np.array(list(map(float, currentCoord)))).astype(float),-1)
@@ -147,7 +147,7 @@ else:
     
     
     month = int(str(date.today()).split("-")[1])
-    month = 6
+    month = 10
     
     
     
@@ -189,6 +189,9 @@ else:
         
 
 message = (str(prediction[0]*100)) + "\n"
+
+
+
  
 
 
@@ -196,7 +199,7 @@ message = (str(prediction[0]*100)) + "\n"
 #sending to mid server
 s2 = socket.socket()
 #hostname = "DESKTOP-L6VTJ5H"
-hostname2 = "192.168.137.130" #arayn
+hostname2 = "192.168.43.22" #arayn
 #hostname2  = "192.168.137.164 "   #arpit 
 port2 = 8050
 

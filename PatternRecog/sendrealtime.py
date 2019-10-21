@@ -51,7 +51,7 @@ lat,long = currentCoord[0],currentCoord[1]
 
 
 
-dfTOT = pd.read_csv("downloaded_data2.csv")
+dfTOT = pd.read_csv("downloaded_data.csv")
 
 df = pd.DataFrame()
 for i in range(0,len(dfTOT)):

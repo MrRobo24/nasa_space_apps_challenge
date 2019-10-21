@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "291860924542",
+    "firebase_url": "https://helloworld-252113.firebaseio.com",
+    "project_id": "helloworld-252113",
+    "storage_bucket": "helloworld-252113.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:291860924542:android:29c6cf6ef0f9893169302f",
+        "android_client_info": {
+          "package_name": "com.example.nasa"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "291860924542-nd3anuii65r6k40l7o92jdlmbl4rtpk8.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.nasa",
+            "certificate_hash": "f7fe885136127d83580d167c4bb5b2078144c4a2"
+          }
+        },
+        {
+          "client_id": "291860924542-dtajq4s1k8r5snlc74esrknmokmgmbnt.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDG9PmpFr5SIhqmOMR76GEGA8hT1Ikwzjg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "291860924542-dtajq4s1k8r5snlc74esrknmokmgmbnt.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

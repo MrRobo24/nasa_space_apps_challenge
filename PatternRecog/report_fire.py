@@ -13,11 +13,12 @@ import socket
 #import time
 
 os.chdir("C:/Users/mr_ro/Documents/GitHub/nasa_space_apps_challenge/PatternRecog")
+"""
 url='https://firms.modaps.eosdis.nasa.gov/data/active_fire/viirs/csv/VNP14IMGTDL_NRT_South_Asia_24h.csv'
 response = requests.get(url)
 with open(os.path.join("downloaded_data.csv"), 'wb') as f:
     f.write(response.content)
-    
+"""
 df = pd.read_csv("downloaded_data.csv")    
 
 coordinates = np.array(df.loc[:,"latitude":"longitude"])
@@ -43,7 +44,7 @@ print("DATA DOWNLOADED")
 
 s = socket.socket()
 #hostname = "DESKTOP-L6VTJ5H"
-hostname = "192.168.137.130"
+hostname = "192.168.43.22"
 port = 8090
 
 #experimenting
@@ -84,7 +85,8 @@ except:
 
 """
 
-
+#hardcoded
+#message = "30.84795 79.37023 2"
 
 #sample = "24.22323 62.2322"
 #message = "0 0"
@@ -125,24 +127,60 @@ if(len(coordDF)>0):
         confidence = 0.25
     
     
-    message = str((df.iloc[coordDF.loc[iMin,0],0:2].values)[0]) +" "+ str((df.iloc[coordDF.loc[iMin,0],0:2].values)[1]) + str(df.iloc[coordDF.loc[iMin,0]:]) +" "+str(minDis+str(confidence))
+    message1 = str((df.iloc[coordDF.loc[iMin,0],0:2].values)[0]) +" "+ str((df.iloc[coordDF.loc[iMin,0],0:2].values)[1]) +" " + str(df.iloc[coordDF.loc[iMin,0]:]) +" "+str(minDis+str(confidence))
 
 else:
     print("NO AREA")
-    message = "24.22323 62.2322 0.2344 0.5"
+    message1 = "24.22323 62.2322 0.2344 0.5 "
+    """
+os.chdir("C:/Users/mr_ro/Documents/GitHub/nasa_space_apps_challenge/PatternRecog")
+dfTOT = pd.read_csv("downloaded_data.csv")
+lat,long = currentCoord[0],currentCoord[1]
 
-message = message + "\n"
+df = pd.DataFrame()
+for i in range(0,len(dfTOT)):
+    latTemp = dfTOT.iloc[i,0]
+    longTemp = dfTOT.iloc[i,1]
+    
+    disTemp = 111*math.sqrt((latTemp - lat)**2 + (longTemp - long)**2)
+    if disTemp < 100:
+        print(dfTOT.iloc[i,0])
+        l = [[dfTOT.iloc[i,0],dfTOT.iloc[i,1]]]
+        df = df.append(l)
+
+df.to_csv("current_zone.csv")
+if len(df>0):
+    message = ""
+    for i in range(0,len(df)):
+        message = message + str(df.iloc[i,0]) + "," + str(df.iloc[i,1])
+        if not i == len(df) - 1:
+            message = message + " "
+            
+    message = "0,1 " + message + "\n"
+else:
+    message  = "0,1 0,0\n"
+    
+message = message1 +  message
+
+    
+
+
+
+"""
+
+
+message1 = message1 + "\n"
 #sending
 s2 = socket.socket()
 
 #hostname = "DESKTOP-L6VTJ5H"
-hostname2 = "192.168.137.130" #aryan
+hostname2 = "192.168.43.22" #aryan
 #hostname2  = "192.168.137.164 "   #arpit 
 port2 = 8050
 
 
 s2.connect((hostname2,port2))
-s2.send(message.encode())
+s2.send(message1.encode())
 
 
 #s.send(message.encode())

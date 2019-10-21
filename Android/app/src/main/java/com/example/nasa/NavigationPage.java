@@ -1,13 +1,27 @@
 package com.example.nasa;
 
+import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
+import android.os.AsyncTask;
 import android.os.Bundle;
 
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 
+import android.os.Handler;
 import android.view.View;
 
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
@@ -21,8 +35,22 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import android.view.Menu;
+import android.widget.Toast;
+
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.net.ServerSocket;
+import java.net.Socket;
 
 public class NavigationPage extends AppCompatActivity {
+
+    LocationManager locationManager;
+    String latlong, flag;
+    Double lat,lon;
 
     private AppBarConfiguration mAppBarConfiguration;
 
@@ -54,9 +82,30 @@ public class NavigationPage extends AppCompatActivity {
         NavigationUI.setupWithNavController(navigationView, navController);
     }
 
-    public void check(View view)
+    public void map(View view)
+    {
+        Intent i=new Intent(view.getContext(), AuthorityMap.class);
+        startActivity(i);
+    }
+
+    public void map1(View view)
+    {
+
+
+        Intent i=new Intent(view.getContext(), MapsActivity.class);
+        startActivity(i);
+    }
+
+
+    public void report(View view)
     {
         Intent i=new Intent(this, Check_Safety.class);
+        startActivity(i);
+    }
+
+    public void check(View view)
+    {
+        Intent i=new Intent(this, Predict.class);
         startActivity(i);
     }
 

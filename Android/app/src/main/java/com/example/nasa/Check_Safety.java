@@ -13,6 +13,7 @@
         import android.provider.Settings;
         import android.view.View;
         import android.widget.Button;
+        import android.widget.SeekBar;
         import android.widget.TextView;
 
         import androidx.annotation.NonNull;
@@ -55,6 +56,8 @@
 
         import androidx.appcompat.app.AppCompatActivity;
 
+        import com.example.nasa.ui.login.LoginActivity;
+
         import java.io.IOException;
         import java.io.PrintWriter;
         import java.net.Socket;
@@ -62,11 +65,15 @@
 
         public class Check_Safety extends AppCompatActivity implements LocationListener {
 
-            Button getLocationBtn,clickable;
+            Button getLocationBtn,clickable,alert,sos;
             TextView locationText,textbox;
-            String latlong,mssg;
+            String latlong,flag;
             Location l;
             LocationManager locationManager;
+            SeekBar seekBar;
+            int progseek;
+            double avgconfidence;
+            public String tmpmsg;
 
             @Override
             protected void onCreate(Bundle savedInstanceState) {
@@ -77,11 +84,16 @@
                 //getLocationBtn = (Button)findViewById(R.id.getLocationBtn);
                 locationText = (TextView)findViewById(R.id.locationText);
                 clickable = (Button)findViewById(R.id.sendLocationBtn);
-                textbox=(TextView)findViewById(R.id.Textbox);
+                alert=(Button)findViewById(R.id.sendAlertBtn);
+                sos=(Button)findViewById(R.id.sosBtn);
+                seekBar=(SeekBar)findViewById(R.id.seekBar);
 
 
-                Thread myThread = new Thread(new MyServerThread());
-                myThread.start();
+                alert.setVisibility(View.GONE);
+                sos.setVisibility(View.GONE);
+
+
+
 
                 if (ContextCompat.checkSelfPermission(getApplicationContext(), android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getApplicationContext(), android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
 
@@ -96,14 +108,38 @@
 
                 clickable.setOnClickListener(new View.OnClickListener(){
                     public void onClick(View v){
-                        double a=l.getLatitude();
-                        double b=l.getLongitude();
                         MessageSender messageSender = new MessageSender();
-                        latlong=a+" "+b;
                         messageSender.execute(latlong);
+
                     }
                 });
-            }
+
+
+                seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+                    @Override
+                    public void onProgressChanged(SeekBar seekBar, int progress,
+                                                  boolean fromUser) {
+                        progseek=progress;
+                        Toast.makeText(getApplicationContext(),"seekbar progress: "+progress, Toast.LENGTH_SHORT).show();
+                    }
+
+                    @Override
+                    public void onStartTrackingTouch(SeekBar seekBar) {
+                        Toast.makeText(getApplicationContext(),"seekbar touch started!", Toast.LENGTH_SHORT).show();
+                    }
+
+                    @Override
+                    public void onStopTrackingTouch(SeekBar seekBar) {
+                        Toast.makeText(getApplicationContext(),"seekbar touch stopped!", Toast.LENGTH_SHORT).show();
+                    }
+                });
+
+                Thread myThread = new Thread(new MyServerThread());
+                myThread.start();
+
+        }
+
+
 
             void getLocation() {
                 try {
@@ -121,6 +157,7 @@
             @Override
             public void onLocationChanged(final Location location) {
                 l=location;
+                latlong=location.getLatitude()+" "+location.getLongitude();
                 locationText.setText("Latitude: " + location.getLatitude() + "\n Longitude: " + location.getLongitude());
 
                 try {
@@ -150,6 +187,26 @@
 
             }
 
+            public void alertMail(View view)
+            {
+                Intent i=new Intent(view.getContext(), Mailing.class);
+                startActivity(i);
+            }
+
+            public void sosMail(View view)
+            {
+                String mail = "aryannegi313@gmail.com";
+                String subject="Fire At ";
+                String message = latlong+" with "+avgconfidence+" confidence";
+
+                //Send Mail
+                JavaMailAPI javaMailAPI = new JavaMailAPI(this,mail,subject,message);
+
+                javaMailAPI.execute();
+              //  Toast.makeText(getApplicationContext(),"Alert Sent",Toast.LENGTH_SHORT).show();
+
+            }
+
 
             class MessageSender extends AsyncTask<String,Void,Void> {
 
@@ -159,11 +216,12 @@
 
                 protected Void doInBackground(String... voids)
                 {
-                    String message=voids[0];
+                    flag="1";
+                    String message=voids[0]+" "+flag;
 
                     try
                     {
-                        s=new Socket("192.168.0.122",8000);
+                        s=new Socket("192.168.43.22",9090); //8000 original
                         pw=new BufferedWriter(new OutputStreamWriter(s.getOutputStream()));
                         pw.write(message+"\n",0,message.length());
                         pw.newLine();
@@ -177,6 +235,8 @@
                     return  null;
                 }
 
+
+
             }
 
             class MyServerThread implements Runnable
@@ -187,6 +247,7 @@
                 BufferedReader br;
                 Handler h = new Handler();
                 String message="Test";
+
                 @Override
                 public void run()
                 {
@@ -199,20 +260,38 @@
                             isr =new InputStreamReader(s.getInputStream());
                             br = new BufferedReader(isr);
                             message = br.readLine();
+                            tmpmsg=message;
+                            final String temp[]=message.split(" ");
+
 
                             h.post(new Runnable()
                             {
                                 public void run() {
-                                    Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(getApplicationContext(), "Sent", Toast.LENGTH_SHORT).show();
+
+                                    if(Double.parseDouble(temp[2])<=2.5)
+                                    {
+                                        avgconfidence=Double.parseDouble(temp[3])*progseek;
+                                        sos.setVisibility(View.VISIBLE);
+                                    }
+                                    else
+                                    {
+                                        alert.setVisibility(View.VISIBLE);
+                                    }
+
                                 }
                             });
+                            ss.close();
+                            s.close();
                         }
                     }catch(IOException e)
                     {
-                        Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
+                       // Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
                         e.printStackTrace();
                     }
                 }
+
+
 
             }
 
